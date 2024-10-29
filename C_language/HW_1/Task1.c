@@ -1,1 +1,8 @@
-First_task_HW
+#include <stdio.h>
+
+int main(void)
+{
+    printf ("Hello world!\n");
+    return 0;
+}
+
