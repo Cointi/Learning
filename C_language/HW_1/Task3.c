@@ -2,7 +2,12 @@
 
 int main(void)
 {
-    printf ("Hello world!\n");
+    printf ("   *\n");
+    printf ("  ***\n");
+    printf (" *****\n");
+    printf ("*******\n");
+    printf (" HHOHH\n");
+    printf (" ZZZZZ\n");
     return 0;
 }
 
