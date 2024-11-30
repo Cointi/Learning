@@ -25,39 +25,27 @@
 #include <stdio.h>
 #include <math.h>
 
-int mainder;
-int N,P;
-int dex=0;
-int result[32];
-
-void system(int N, int P)
+void system(int N , int P)
 {
-    if(N==0)
-    {
-        printf("%d",N);
-    }
-    while(N>0)
+   // int dex;
+    int mainder;
+
+    if(N>0)
     {
         mainder=N%P;
-        N/=P;
-        result[dex]=mainder;
-        dex++;
-    }
-
-    while(dex>0)
-    {
-        dex--;
-        printf("%d", result[dex]);
+        system(N/=P, P);
+        printf("%d", mainder);
 
     }
-
 }
-
 int main()
 {
+    int N,P;
     scanf("%d%d", &N,&P);
     system(N,P);
     return 0;
 }
+
+
 
 
