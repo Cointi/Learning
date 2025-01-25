@@ -25,24 +25,24 @@
 #include <stdio.h>
 #include <math.h>
 
-void system(int N , int P)
+void system(int Na , int Pa)
 {
-   // int dex;
+
     int mainder;
 
-    if(N>0)
+    if(*Na>0)
     {
-        mainder=N%P;
-        system(N/=P, P);
+        mainder=Na%Pa;
+        Na/=Pa;
+        system(Na, Pa);
         printf("%d", mainder);
-
     }
 }
 int main()
 {
     int N,P;
     scanf("%d%d", &N,&P);
-    system(N,P);
+    system(&N,&P);
     return 0;
 }
 
