@@ -2,7 +2,7 @@
 #include <stdint.h>
 #include <string.h>
 #include <unistd.h>
-// #include "temp_api.h"
+//#include "temp_api.h"
 
 #define SIZE 30
 #define MAX_LENGTH 1000
@@ -19,7 +19,6 @@ struct sensor
 
 int readInputFile(const char *filename, struct sensor *data, size_t bufferSize)
 {
-
     FILE *file = fopen(filename, "r");
     if (file == NULL)
     {
@@ -103,59 +102,53 @@ void printSensorInfo(struct sensor *info, int number)
                info[i].temperature);
 }
 
-// среднемесячная температура
-int Average_temp(struct sensor *info, int i, size_t index)
+// статистика за месяц
+void Statistic_month(struct sensor *info, int i, size_t index)
 {
-    // char temp=*i;
-    //int mot = *i - '0';
-    int mot = i;
-    //printf("% d\n", mot);
-    uint8_t number[SIZE] = {0};
-    int sum = 0, count = 0, average = -1;
-
+    int sum = 0, count = 0, average = -1, min = 100, max = -100;
     for (int j = 0; j < index; j++)
     {
-        if (info[j].month == mot)
+        if (info[j].month == i)
         {
             sum += info[j].temperature;
             count++;
-            // printf(" count = %d\n", count);
+            if (min > info[j].temperature)
+                min = info[j].temperature;
+            if (max < info[j].temperature)
+                max = info[j].temperature;
         }
     }
     average = sum / count;
-    return average;
+    printf(" average_temp = %d;\n min temperature = %d;\n max temperature = %d;\n", average, min, max);
 }
-// минимальная температура
-void Min_Temp(struct sensor *info, int i)
+
+// статистика за год
+void Statistic_year(struct sensor *info, size_t index)
 {
+    int sum = 0, count = 0, average = -1, min = 100, max = -100;
+    for (int j = 0; j < index; j++)
+    {
+
+        sum += info[j].temperature;
+        count++;
+        if (min > info[j].temperature)
+            min = info[j].temperature;
+        if (max < info[j].temperature)
+            max = info[j].temperature;
+    }
+    average = sum / count;
+    printf(" average temperature in %d = %d\n; min temperature  in year= %d;\n max temperature in year= %d;\n", info->year , average, min, max);
 }
-// максимальная температура
-void Max_Temp(struct sensor *info, int i)
-{
-}
-void Statistic_month(void)
-{}
-    // статистика за год
-void Statistic_year(struct sensor *info, int i)
-{
-    /* int u=0;
-     for(int j=1;j<=i;j++)
-     {
-         Average_temp(info,j);
-         Min_Temp(info,j);
-         Max_Temp(info,j);
-     }*/
-}
+
+
+
 
 int main(int argc, char **argv)
 {
     struct sensor info[SIZE];
     char *file_path = NULL;
     int rez = 0;
-    int flag_m=0;
-
-    
-
+    int flag_m = 0;
 
     while ((rez = getopt(argc, argv, "hf:m:")) != -1)
     {
@@ -169,14 +162,14 @@ int main(int argc, char **argv)
         case 'f':
         {
             printf("found argument \"f\".\n");
-            file_path=optarg;
-            printf("file path %s\n",file_path);
+            file_path = optarg;
+            printf("file path %s\n", file_path);
             break;
-        }   
+        }
         case 'm':
         {
             printf("found argument \"m = %s\".\n", optarg);
-            flag_m=*optarg-'0';
+            flag_m = *optarg - '0';
             break;
         }
         case '?':
@@ -184,26 +177,17 @@ int main(int argc, char **argv)
             break;
         }
     }
-    size_t index = readInputFile(file_path, info, SIZE);// D:/Geany/Lesson/VS/temperature_small.csv
+    size_t index = readInputFile(file_path, info, SIZE); // D:/Geany/Lesson/VS/temperature_small.csv
     if (index >= 0)
         printSensorInfo(info, index);
     /*for (int i = 0; i < argc; i++)
     {
         printf("\n%s \n", argv[i]);
     }*/
-    if(flag_m!=0)
-    {
-            int a = Average_temp(info, flag_m, index);
-            printf(" average_temp = %d\n", a);
-    }
+    if (flag_m != 0)
+        Statistic_month(info, flag_m, index);
+    else
+        Statistic_year(info, index);
 
-    // printf("%s\n",str_in);
-
-    // struct sensor info[SIZE];
-    // int number = 12;//AddInfo(info); //количество месяцев в году
-    /*Average_temp(info,number);// среднемесячная температура
-    Min_Temp(info,number);//минимальная температура в месяце
-    Max_Temp(info,number);//максимальная температура в месяце
-    Statistic_year(info,number);//статистика за год*/
-    return 0;
+        return 0;
 }
