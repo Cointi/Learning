@@ -1,5 +1,9 @@
 {
     "files.associations": {
-        "temp_api.h": "c"
+        "temp_api.h": "c",
+        "unistd.h": "c",
+        "getopt.h": "c",
+        "crtdefs.h": "c",
+        "corecrt.h": "c"
     }
 }

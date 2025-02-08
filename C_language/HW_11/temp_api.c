@@ -2,12 +2,12 @@
 #include <stdint.h>
 #include <string.h>
 #include <unistd.h>
-//#include "temp_api.h"
+#include "temp_api.h"
 
 #define SIZE 30
 #define MAX_LENGTH 1000
 
-struct sensor
+/*struct sensor
 {
     uint16_t year;
     uint8_t month;
@@ -16,7 +16,7 @@ struct sensor
     uint8_t minute;
     int8_t temperature;
 };
-
+*/
 int readInputFile(const char *filename, struct sensor *data, size_t bufferSize)
 {
     FILE *file = fopen(filename, "r");
@@ -62,10 +62,7 @@ int readInputFile(const char *filename, struct sensor *data, size_t bufferSize)
             }
         }
         else
-        {
-            // Пропуск строки с некорректной температурой или отсутствующим значением
-            continue;
-        }
+            continue;     // Пропуск строки с некорректной температурой или отсутствующим значением
     }
     fclose(file);
     return index; // Возвращаем количество считанных записей
@@ -137,7 +134,8 @@ void Statistic_year(struct sensor *info, size_t index)
             max = info[j].temperature;
     }
     average = sum / count;
-    printf(" average temperature in %d = %d\n; min temperature  in year= %d;\n max temperature in year= %d;\n", info->year , average, min, max);
+    printf("average temperature in %d year = %d;\nmin temperature  in %d year = %d;\nmax temperature in %d year = %d;\n", 
+    info->year, average,info->year, min,info->year , max);
 }
 
 
@@ -156,8 +154,12 @@ int main(int argc, char **argv)
         {
         case 'h':
         {
-            printf("found argument \"h\".\n By default, the program outputs statistics for each month and year from a data file\n Command -f is the path to the data file\nCommand -m x is the statistics for month x only\n");
-            break;
+            printf("found argument \"h\".\n\
+            By default, the program outputs statistics for each month and year from a data file\n\
+            Command -f is the path to the data file\n\
+            Command -m x is the statistics for month x only\n");
+            //break;
+            return 0;
         }
         case 'f':
         {
@@ -165,6 +167,7 @@ int main(int argc, char **argv)
             file_path = optarg;
             printf("file path %s\n", file_path);
             break;
+            //return 0;
         }
         case 'm':
         {
@@ -173,21 +176,16 @@ int main(int argc, char **argv)
             break;
         }
         case '?':
-            printf("Error found !\n");
+            printf("Error found! Try -h for help\n");
             break;
         }
     }
     size_t index = readInputFile(file_path, info, SIZE); // D:/Geany/Lesson/VS/temperature_small.csv
     if (index >= 0)
         printSensorInfo(info, index);
-    /*for (int i = 0; i < argc; i++)
-    {
-        printf("\n%s \n", argv[i]);
-    }*/
     if (flag_m != 0)
         Statistic_month(info, flag_m, index);
     else
         Statistic_year(info, index);
-
-        return 0;
+    return 0;
 }

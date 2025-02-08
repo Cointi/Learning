@@ -1,5 +1,7 @@
 
 
+
+
 struct sensor
 {
     uint16_t year;
@@ -10,7 +12,7 @@ struct sensor
     int8_t temperature;
 };
 
-int readInputFile(const char* , struct sensor*, size_t bufferSize)
+int readInputFile(const char* , struct sensor*, size_t bufferSize);
 void printSensorInfo(struct sensor*, int);
-void Statistic_year(struct sensor* , int );
+void Statistic_year(struct sensor* , size_t);
 void Statistic_month(struct sensor* , int, size_t );
