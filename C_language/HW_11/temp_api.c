@@ -135,7 +135,24 @@ void Statistic_year(struct sensor *info, size_t index)
     }
     average = sum / count;
     printf("average temperature in %d year = %d;\nmin temperature  in %d year = %d;\nmax temperature in %d year = %d;\n", 
-    info->year, average,info->year, min,info->year , max);
+    info->year, average, info->year, min,info->year , max);
+}
+
+//сортировка по температуре 
+void Sort_temp(struct sensor *info, size_t index)
+{
+    for(int i=0;i<index;i++)
+    {
+        for(int j=i;j<index;j++)
+        {
+            if(info[i].temperature>info[j].temperature)
+            {
+                struct sensor template = info[i];
+                info[i] = info[j];
+                info[j] = template;
+            }
+        }
+    }
 }
 
 
@@ -186,6 +203,11 @@ int main(int argc, char **argv)
     if (flag_m != 0)
         Statistic_month(info, flag_m, index);
     else
+    {
         Statistic_year(info, index);
+        Sort_temp(info, index);
+        printSensorInfo(info, index);
+    }
     return 0;
+
 }
