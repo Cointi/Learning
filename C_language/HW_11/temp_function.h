@@ -1,5 +1,5 @@
 
-
+//#define MAX_LENGTH 1000
 
 
 struct sensor
@@ -12,7 +12,9 @@ struct sensor
     int8_t temperature;
 };
 
-int readInputFile(const char* , struct sensor*, size_t bufferSize);
+
+size_t readInputFile(const char* , struct sensor**, size_t*);
 void printSensorInfo(struct sensor*, int);
 void Statistic_year(struct sensor* , size_t);
 void Statistic_month(struct sensor* , int, size_t );
+//void Sort_temp(struct sensor * , size_t);//функция сортировки по темп

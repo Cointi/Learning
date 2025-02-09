@@ -1,11 +1,14 @@
-all: sensor
+all: report
 
-sensor: temp_api.o 
-	gcc -o sensor temp_api.o 
+report: temp_function.o report.o
+	gcc -o report temp_function.o report.o
 
-temp_api.o: temp_api.c
-	gcc -c -o temp_api.o temp_api.c
+temp_function.o: temp_function.c
+	gcc -c -o temp_function.o temp_function.c
+
+report.o: report.c
+	gcc -c -o report.o report.c
 
 clean:
 	del *.o
-	del sensor.exe
+	del report.exe
