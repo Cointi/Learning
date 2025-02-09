@@ -32,14 +32,14 @@ int main(int argc, char **argv)
         }
         case 'f':
         {
-            printf("found argument \"f\".\n");
+            //printf("found argument \"f\".\n");
             file_path = optarg;
-            printf("file path %s\n", file_path);
+            //printf("file path %s\n", file_path);
             break;
         }
         case 'm':
         {
-            printf("found argument \"m = %s\".\n", optarg);
+            //printf("found argument \"m = %s\".\n", optarg);
             // flag_m = atoi(optarg);
             while (*optarg) // цикл перевода строки в число
             {

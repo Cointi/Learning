@@ -1,7 +1,4 @@
 
-//#define MAX_LENGTH 1000
-
-
 struct sensor
 {
     uint16_t year;

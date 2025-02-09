@@ -13,27 +13,28 @@ size_t readInputFile(const char* filename, struct sensor** data, size_t* bufferS
     FILE *file = fopen(filename, "r");
     if (file == NULL)
     {
-        printf("\nError open file\nTry -h for help\n\n");
+        printf("\nError open file: %s\nTry -h for help\n\n", filename);
+        fclose(file);
         return 0;
     }
     int index = 0;
     char line[100] = {0};
-    int num_str=0;// хранение количества итераций для отслеживания номер строки с ошибкой
+    int line_num=0;// хранение количества итераций для отслеживания номер строки с ошибкой
     
     while (fgets(line, sizeof(line), file))
     {
         if(index >= *bufferSize)// проврека на необходимость расширения памяти
         {
             *bufferSize*=2;
-            struct sensor *vary = realloc(*data, *bufferSize*(sizeof(struct sensor)));
-            if(!vary)
+            struct sensor *temp_buffer  = realloc(*data, *bufferSize*(sizeof(struct sensor)));
+            if(!temp_buffer )
             {
-                printf("Error realloc\n");
-                free(vary);
+                printf("Error reallocationg memory\n");
+                free(*data);
                 fclose(file);
                 return index;
             }
-            *data=vary;
+            *data = temp_buffer ;
         }
         uint16_t year;
         uint8_t month, day, hour, minute;
@@ -41,9 +42,14 @@ size_t readInputFile(const char* filename, struct sensor** data, size_t* bufferS
         
         int items_read = sscanf(line, "%hu;%hhu;%hhu;%hhu;%hhu;%d",
                                 &year, &month, &day, &hour, &minute, &temp_read);
-        num_str++;
+        line_num++;
         if (items_read == 6)
         {
+            if (month < 1 || month > 12 || day < 1 || day > 31 || hour > 23 || minute > 59)
+            {
+                printf("\nInvalid data in string %d\n", line_num);
+                continue;
+            }
             if (index < *bufferSize)
             {
                 (*data)[index].year = year;
@@ -57,7 +63,7 @@ size_t readInputFile(const char* filename, struct sensor** data, size_t* bufferS
         }
         else
         {
-            printf("\nError data string %d\n", num_str); // string с некорректным значением
+            printf("\nError data string %d\n", line_num); // string с некорректным значением
             continue;     
         }
     }
@@ -80,13 +86,13 @@ void printSensorInfo(struct sensor *info, int number)
 }
 
 // статистика за месяц
-void Statistic_month(struct sensor *info, int i, size_t index)
+void Statistic_month(struct sensor *info, int month, size_t index)
 {
     int sum = 0, count = 0, average = -1, min = 100, max = -100;
-    static int num_cc=0;// счетчик пункта месяцев
+    static int line_num=0;// счетчик пункта месяцев
     for (int j = 0; j < index; j++)
     {
-        if(info[j].month == i)
+        if(info[j].month == month)
         {
             sum += info[j].temperature;
             count++;
@@ -95,12 +101,12 @@ void Statistic_month(struct sensor *info, int i, size_t index)
             if (max < info[j].temperature)
                 max = info[j].temperature;
         }            
-    }
-    average = sum / count;
-    num_cc++;
-    printf("\n\
-# Year Month Month_avg Month_max Month_min\n\
-%d %d  %d      %d        %d        %d     \n",  num_cc, info->year, i, average, max, min);
+    }  
+    if (count > 0)
+        average = sum / count;
+    line_num++;
+    printf("\n# Year Month Month_avg Month_max Month_min\n\
+            \r%d %d  %d      %d        %d        %d     \n",  line_num, info->year, month, average, max, min);
 }
 
 // статистика за год
@@ -119,7 +125,8 @@ void Statistic_year(struct sensor *info, size_t index)
                 max = info[j].temperature;
         }
     }
-    average = sum / count;
+    if (count > 0)
+        average = sum / count;
     
    printf("Year statistics:\n\
             \r  average temp = %d\n\
