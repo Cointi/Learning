@@ -12,7 +12,7 @@ enum {LEFT=1, UP, RIGHT, DOWN, STOP_GAME=KEY_F(10)};
 enum {MAX_TAIL_SIZE=100, START_TAIL_SIZE=20, MAX_FOOD_SIZE=20, FOOD_EXPIRE_SECONDS=10};
 
 
-// Здесь храним коды управления змейкой
+// Р—РґРµСЃСЊ С…СЂР°РЅРёРј РєРѕРґС‹ СѓРїСЂР°РІР»РµРЅРёСЏ Р·РјРµР№РєРѕР№
 struct control_buttons
 {
     int down;
@@ -26,50 +26,50 @@ struct control_buttons default_controls = {KEY_DOWN, KEY_UP, KEY_LEFT, KEY_RIGHT
 
 typedef struct snake_t
 {
-    int x;// координата x
-    int y; // координата y
-    int direction;// направление движения
-    size_t tsize;//размер хвоста
-    struct tail_t *tail;//ссылка на хваост
+    int x;// РєРѕРѕСЂРґРёРЅР°С‚Р° x
+    int y; // РєРѕРѕСЂРґРёРЅР°С‚Р° y
+    int direction;// РЅР°РїСЂР°РІР»РµРЅРёРµ РґРІРёР¶РµРЅРёСЏ
+    size_t tsize;//СЂР°Р·РјРµСЂ С…РІРѕСЃС‚Р°
+    struct tail_t *tail;//СЃСЃС‹Р»РєР° РЅР° С…РІР°РѕСЃС‚
     struct control_buttons controls;
 } snake_t;
 
 
-//Хвост это массив состоящий из координат x,y
+//РҐРІРѕСЃС‚ СЌС‚Рѕ РјР°СЃСЃРёРІ СЃРѕСЃС‚РѕСЏС‰РёР№ РёР· РєРѕРѕСЂРґРёРЅР°С‚ x,y
 typedef struct tail_t
 {
     int x;
     int y;
 } tail_t;
 
-//инициализация хвоста
-void initTail(struct tail_t t[], size_t size) // отправляем массив из структур хвоста и размер самого хвоста
+//РёРЅРёС†РёР°Р»РёР·Р°С†РёСЏ С…РІРѕСЃС‚Р°
+void initTail(struct tail_t t[], size_t size) // РѕС‚РїСЂР°РІР»СЏРµРј РјР°СЃСЃРёРІ РёР· СЃС‚СЂСѓРєС‚СѓСЂ С…РІРѕСЃС‚Р° Рё СЂР°Р·РјРµСЂ СЃР°РјРѕРіРѕ С…РІРѕСЃС‚Р°
 {
-    /*struct*/ tail_t init_t={0,0};// структура из нолей
+    /*struct*/ tail_t init_t={0,0};// СЃС‚СЂСѓРєС‚СѓСЂР° РёР· РЅРѕР»РµР№
     for(size_t i=0; i<size; i++)
     {
-        t[i]=init_t;// инициализируем все структуры нулями
+        t[i]=init_t;// РёРЅРёС†РёР°Р»РёР·РёСЂСѓРµРј РІСЃРµ СЃС‚СЂСѓРєС‚СѓСЂС‹ РЅСѓР»СЏРјРё
     }
 }
-//Функция инициализации головы
-void initHead(struct snake_t *head, int x, int y)//отправляем указатель на голову и где она находиться
+//Р¤СѓРЅРєС†РёСЏ РёРЅРёС†РёР°Р»РёР·Р°С†РёРё РіРѕР»РѕРІС‹
+void initHead(struct snake_t *head, int x, int y)//РѕС‚РїСЂР°РІР»СЏРµРј СѓРєР°Р·Р°С‚РµР»СЊ РЅР° РіРѕР»РѕРІСѓ Рё РіРґРµ РѕРЅР° РЅР°С…РѕРґРёС‚СЊСЃСЏ
 {
-    head->x = x;//присваиваем координатам головы текущее положении
+    head->x = x;//РїСЂРёСЃРІР°РёРІР°РµРј РєРѕРѕСЂРґРёРЅР°С‚Р°Рј РіРѕР»РѕРІС‹ С‚РµРєСѓС‰РµРµ РїРѕР»РѕР¶РµРЅРёРё
     head->y = y;
-    head->direction = RIGHT;//изначально движение вправо
+    head->direction = RIGHT;//РёР·РЅР°С‡Р°Р»СЊРЅРѕ РґРІРёР¶РµРЅРёРµ РІРїСЂР°РІРѕ
 }
-//инициализация змеи
+//РёРЅРёС†РёР°Р»РёР·Р°С†РёСЏ Р·РјРµРё
 void initSnake(snake_t *head, size_t size, int x, int y)
 {
-tail_t*  tail  = (tail_t*) malloc(MAX_TAIL_SIZE*sizeof(tail_t));//выделяем память под наш массив структур хвоста
+tail_t*  tail  = (tail_t*) malloc(MAX_TAIL_SIZE*sizeof(tail_t));//РІС‹РґРµР»СЏРµРј РїР°РјСЏС‚СЊ РїРѕРґ РЅР°С€ РјР°СЃСЃРёРІ СЃС‚СЂСѓРєС‚СѓСЂ С…РІРѕСЃС‚Р°
     initTail(tail, MAX_TAIL_SIZE);
     initHead(head, x, y);
-    head->tail = tail; // прикрепляем к голове хвост
+    head->tail = tail; // РїСЂРёРєСЂРµРїР»СЏРµРј Рє РіРѕР»РѕРІРµ С…РІРѕСЃС‚
     head->tsize = size+1;
     head->controls = default_controls;
 }
 
-//функция проверки утыкания
+//С„СѓРЅРєС†РёСЏ РїСЂРѕРІРµСЂРєРё СѓС‚С‹РєР°РЅРёСЏ
 int crash(struct snake_t *head)
 {
     for(int i=0; i< head->tsize;i++){
@@ -81,19 +81,19 @@ int crash(struct snake_t *head)
     }
     return 0;
 }
-//Движение головы с учетом текущего направления движения
+//Р”РІРёР¶РµРЅРёРµ РіРѕР»РѕРІС‹ СЃ СѓС‡РµС‚РѕРј С‚РµРєСѓС‰РµРіРѕ РЅР°РїСЂР°РІР»РµРЅРёСЏ РґРІРёР¶РµРЅРёСЏ
 int go(struct snake_t *head)
 {
     char ch = '@';
     int max_x=0, max_y=0;
-    getmaxyx(stdscr, max_y, max_x); // macros - размер терминала
-    //mvwprintw(stdscr, max_y-1, 0, "The number of rows - %d and columns - %d\n", max_y, max_x); // размер терминала
-    mvprintw(head->y, head->x, " "); // очищаем один символ
+    getmaxyx(stdscr, max_y, max_x); // macros - СЂР°Р·РјРµСЂ С‚РµСЂРјРёРЅР°Р»Р°
+    //mvwprintw(stdscr, max_y-1, 0, "The number of rows - %d and columns - %d\n", max_y, max_x); // СЂР°Р·РјРµСЂ С‚РµСЂРјРёРЅР°Р»Р°
+    mvprintw(head->y, head->x, " "); // РѕС‡РёС‰Р°РµРј РѕРґРёРЅ СЃРёРјРІРѕР»
 
     switch (head->direction)
     {
         case LEFT:
-            if(head->x <= 0) // Циклическое движение, чтобы не уходить за пределы экрана
+            if(head->x <= 0) // Р¦РёРєР»РёС‡РµСЃРєРѕРµ РґРІРёР¶РµРЅРёРµ, С‡С‚РѕР±С‹ РЅРµ СѓС…РѕРґРёС‚СЊ Р·Р° РїСЂРµРґРµР»С‹ СЌРєСЂР°РЅР°
                 head->x = max_x;
             mvprintw(head->y, --(head->x), "%c", ch);
         break;
@@ -116,11 +116,11 @@ int go(struct snake_t *head)
         break;
     }
     if(crash(head))
-        return 1;// Возвращаем 1, если произошло столкновение
+        return 1;// Р’РѕР·РІСЂР°С‰Р°РµРј 1, РµСЃР»Рё РїСЂРѕРёР·РѕС€Р»Рѕ СЃС‚РѕР»РєРЅРѕРІРµРЅРёРµ
     refresh();
     return 0;
 }
- //функция смены направления движения
+ //С„СѓРЅРєС†РёСЏ СЃРјРµРЅС‹ РЅР°РїСЂР°РІР»РµРЅРёСЏ РґРІРёР¶РµРЅРёСЏ
 void changeDirection(struct snake_t* snake, const int32_t key)
 {
     if ((key == snake->controls.down) && (snake->direction != UP))
@@ -133,7 +133,7 @@ void changeDirection(struct snake_t* snake, const int32_t key)
         snake->direction = LEFT;
 }
 
- //Движение хвоста с учетом движения головы
+ //Р”РІРёР¶РµРЅРёРµ С…РІРѕСЃС‚Р° СЃ СѓС‡РµС‚РѕРј РґРІРёР¶РµРЅРёСЏ РіРѕР»РѕРІС‹
 void goTail(struct snake_t *head)
 {
     char ch = '*';
@@ -156,29 +156,29 @@ void My_timeout(double delay_sec)
 
 int main()
 {
-    snake_t* snake = (snake_t*)malloc(sizeof(snake_t));//выделяем память snake это структура указатель на нашу голову и прикрепленному хвосту
+    snake_t* snake = (snake_t*)malloc(sizeof(snake_t));//РІС‹РґРµР»СЏРµРј РїР°РјСЏС‚СЊ snake СЌС‚Рѕ СЃС‚СЂСѓРєС‚СѓСЂР° СѓРєР°Р·Р°С‚РµР»СЊ РЅР° РЅР°С€Сѓ РіРѕР»РѕРІСѓ Рё РїСЂРёРєСЂРµРїР»РµРЅРЅРѕРјСѓ С…РІРѕСЃС‚Сѓ
     initSnake(snake,START_TAIL_SIZE,10,10);
     initscr();
-    keypad(stdscr, TRUE); // Включаем F1, F2, стрелки и т.д.
-    raw();                // Откдючаем line buffering
-    noecho();            // Отключаем echo() режим при вызове getch
-    curs_set(FALSE);    //Отключаем курсор
+    keypad(stdscr, TRUE); // Р’РєР»СЋС‡Р°РµРј F1, F2, СЃС‚СЂРµР»РєРё Рё С‚.Рґ.
+    raw();                // РћС‚РєРґСЋС‡Р°РµРј line buffering
+    noecho();            // РћС‚РєР»СЋС‡Р°РµРј echo() СЂРµР¶РёРј РїСЂРё РІС‹Р·РѕРІРµ getch
+    curs_set(FALSE);    //РћС‚РєР»СЋС‡Р°РµРј РєСѓСЂСЃРѕСЂ
     mvprintw(0, 0," Use arrows for control. Press 'F10' for EXIT");
-    timeout(0);    //Отключаем таймаут после нажатия клавиши в цикле
+    timeout(0);    //РћС‚РєР»СЋС‡Р°РµРј С‚Р°Р№РјР°СѓС‚ РїРѕСЃР»Рµ РЅР°Р¶Р°С‚РёСЏ РєР»Р°РІРёС€Рё РІ С†РёРєР»Рµ
     int key_pressed=0;
-    int flag_game=0; // флаг конца игры
+    int flag_game=0; // С„Р»Р°Рі РєРѕРЅС†Р° РёРіСЂС‹
     while( key_pressed != STOP_GAME && flag_game != 1)
     {
-        key_pressed = getch(); // Считываем клавишу
+        key_pressed = getch(); // РЎС‡РёС‚С‹РІР°РµРј РєР»Р°РІРёС€Сѓ
         if(go(snake))
-            flag_game=1; //если змея врезалась
+            flag_game=1; //РµСЃР»Рё Р·РјРµСЏ РІСЂРµР·Р°Р»Р°СЃСЊ
         goTail(snake);
-        My_timeout(DEL); // Задержка при отрисовке
+        My_timeout(DEL); // Р—Р°РґРµСЂР¶РєР° РїСЂРё РѕС‚СЂРёСЃРѕРІРєРµ
         changeDirection(snake, key_pressed);
     }
     free(snake->tail);
     free(snake);
-    endwin(); // Завершаем режим curses mod
+    endwin(); // Р—Р°РІРµСЂС€Р°РµРј СЂРµР¶РёРј curses mod
     if(flag_game)
         printf("GAME OVER");
     return 0;
